@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CipherSchools – Verified Learner (Clone)</title>
+  <style>
+    :root{
+      --brand:#f28c28;           /* primary orange */
+      --brand-dark:#cf741e;      /* darker orange */
+      --ink:#1f2937;             /* gray-800 */
+      --ink-700:#374151;         /* gray-700 */
+      --muted:#6b7280;           /* gray-500 */
+      --line:#e5e7eb;            /* gray-200 */
+      --bg:#f9fafb;              /* gray-50 */
+      --card:#ffffff;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      color:var(--ink); background:var(--bg);
+    }
+    a{color:inherit; text-decoration:none}
+    .container{display:grid; grid-template-rows:auto 1fr auto; min-height:100dvh}
+
+    /* Top notice */
+    .notice{background:var(--brand); color:#fff; font-weight:600; text-align:center; padding:10px 16px; position:relative}
+    .notice a{color:#fff; text-decoration:underline}
+
+    /* Header */
+    header{
+      display:grid; grid-template-columns: 48px 220px 1fr auto; gap:16px; align-items:center;
+      padding:14px 20px; background:#fff; border-bottom:1px solid var(--line); position:sticky; top:0; z-index:40;
+    }
+    .btn-icon{width:40px; height:40px; display:grid; place-items:center; border:1px solid var(--line); border-radius:10px; background:#fff; cursor:pointer}
+    .logo{display:flex; align-items:center; gap:10px; font-weight:800; letter-spacing:.2px}
+    .logo .mark{display:grid; place-items:center; width:36px; height:36px; border-radius:50%; background:#111; color:#fff; font-weight:900; position:relative}
+    .logo .mark:after{content:"C"; color:var(--brand); font-size:18px}
+
+    .search{display:flex; align-items:center; gap:10px; background:var(--bg); border:1px solid var(--line); border-radius:999px; padding:10px 14px}
+    .search input{border:0; outline:0; background:transparent; width:100%; font-size:14px}
+    .actions{display:flex; align-items:center; gap:14px}
+    .chip{display:inline-flex; align-items:center; gap:6px; padding:8px 12px; border:1px solid var(--line); border-radius:999px; background:#fff; font-weight:600}
+    .dot{position:relative}
+    .dot:after{content:attr(data-count); position:absolute; top:-6px; right:-6px; background:var(--brand); color:#fff; border-radius:999px; font-size:10px; width:18px; height:18px; display:grid; place-items:center}
+    .avatar{width:28px; height:28px; border-radius:50%; background:linear-gradient(135deg,#ddd,#aaa)}
+
+    /* Layout */
+    .layout{display:grid; grid-template-columns: 84px 1fr; min-height:0}
+
+    /* Sidebar */
+    .sidebar{background:#fff; border-right:1px solid var(--line); padding:14px 10px; position:sticky; top:72px; height:calc(100dvh - 72px); overflow:auto}
+    .side-item{display:grid; grid-template-columns: 1fr; justify-items:center; gap:6px; color:var(--ink-700); padding:14px 6px; border-radius:14px; cursor:pointer}
+    .side-item.active{background:var(--bg); color:#111; font-weight:700}
+    .side-item svg{width:22px; height:22px}
+    .side-label{font-size:11px}
+
+    /* Main */
+    main{padding:24px 28px}
+    .hero{display:grid; grid-template-columns: minmax(280px,540px) 1fr; gap:28px; align-items:center}
+    .card{background:#fff; border:1px solid var(--line); border-radius:18px; padding:16px; box-shadow: 0 10px 30px rgba(0,0,0,.05)}
+    .certificate{
+      aspect-ratio: 4 / 3; background: #fff; border:1px solid var(--line); border-radius:14px; display:grid; place-items:center; position:relative; overflow:hidden
+    }
+    .certificate .ribbon{position:absolute; left:28px; top:0; bottom:0; width:60px; background:var(--brand)}
+    .certificate .frame{position:absolute; inset:18px; border:6px solid var(--brand); border-radius:6px; opacity:.6}
+    .certificate .qr{position:absolute; right:18px; bottom:18px; width:64px; height:64px; border:2px solid #111}
+    .cert-text{font-weight:800; letter-spacing:.6px}
+
+    .verified h1{font-size:46px; line-height:1.1; margin:0 0 12px}
+    .badge{display:inline-flex; align-items:center; gap:8px; font-weight:800}
+    .badge svg{width:24px; height:24px}
+    .muted{color:var(--muted)}
+    .btns{display:flex; gap:12px; margin-top:18px}
+    .btn{border:none; padding:12px 16px; border-radius:12px; font-weight:700; cursor:pointer}
+    .btn.primary{background:var(--brand); color:#fff}
+    .btn.primary:hover{background:var(--brand-dark)}
+    .btn.ghost{background:#fff; border:2px solid var(--line)}
+
+    .cta{background:#222; color:#fff; border-radius:16px; padding:22px 24px; display:flex; justify-content:space-between; align-items:center; margin-top:28px}
+    .cta p{margin:0; opacity:.9}
+    .cta .cta-btn{background:var(--brand); border:0; color:#fff; font-weight:800; padding:12px 16px; border-radius:12px; cursor:pointer}
+
+    /* Footer */
+    footer{background:#fff; border-top:1px solid var(--line); margin-top:34px}
+    .foot-wrap{padding:28px}
+    .foot-top{display:grid; gap:22px; margin-bottom:18px}
+    .foot-brand{display:flex; align-items:center; gap:14px}
+    .foot-columns{display:grid; grid-template-columns: repeat(4, minmax(160px,1fr)); gap:20px; margin-top:14px}
+    .col h4{margin:0 0 10px; font-size:16px}
+    .col a{display:block; color:var(--ink-700); padding:6px 0; font-size:14px}
+    .social{display:flex; gap:12px; margin-top:14px}
+    .social .s{width:36px; height:36px; border:1px solid var(--line); border-radius:10px; display:grid; place-items:center}
+    .brand-note{font-size:14px; color:var(--ink-700)}
+    .foot-bottom{border-top:1px solid var(--line); padding:16px 28px; display:flex; flex-wrap:wrap; justify-content:space-between; gap:10px; color:var(--muted)}
+
+    /* Responsive */
+    @media (max-width: 1100px){
+      .hero{grid-template-columns: 1fr}
+    }
+    @media (max-width: 900px){
+      header{grid-template-columns: 48px 1fr auto;}
+      .logo{display:none}
+      .layout{grid-template-columns: 64px 1fr}
+    }
+    @media (max-width: 680px){
+      .sidebar{position:fixed; left:-90px; transition:left .25s ease; z-index:50}
+      .sidebar.open{left:0}
+      .layout{grid-template-columns: 0 1fr}
+      .btn-icon[data-toggle] {display:grid}
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="notice">Important Update: We've updated our free content policy. <a href="#">Check here</a></div>
+
+    <header>
+      <button class="btn-icon" id="menuBtn" aria-label="Open Menu" data-toggle>
+        <!-- Hamburger -->
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+      <a class="logo" href="#">
+        <span class="mark"></span>
+        <span style="font-size:18px">CipherSchools</span>
+      </a>
+      <label class="search" for="search">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+        <input id="search" placeholder="Search and Learn" />
+      </label>
+      <div class="actions">
+        <div class="btn-icon dot" data-count="0" aria-label="Notifications">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+        </div>
+        <span class="chip"><span class="avatar"></span> Hey</span>
+        <span class="chip"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg> 0</span>
+      </div>
+    </header>
+
+    <div class="layout">
+      <!-- Sidebar -->
+      <aside class="sidebar" id="sidebar">
+        <div class="side-item active">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l9-9 9 9"/><path d="M9 21V9h6v12"/></svg>
+          <div class="side-label">Home</div>
+        </div>
+        <div class="side-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 8h10M7 12h10M7 16h6"/></svg>
+          <div class="side-label">Courses</div>
+        </div>
+        <div class="side-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h18"/><path d="M3 6h12"/><path d="M3 18h6"/></svg>
+          <div class="side-label">Trending</div>
+        </div>
+        <div class="side-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 17l-5 3 1-5-4-4 5-.8L12 5l2 4.2 5 .8-4 4 1 5z"/></svg>
+          <div class="side-label">Rewards</div>
+        </div>
+        <div class="side-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h18"/><path d="M7 8v10a2 2 0 002 2h6a2 2 0 002-2V8"/><path d="M10 12h4"/></svg>
+          <div class="side-label">Compiler</div>
+        </div>
+        <div class="side-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 3v4"/><path d="M8 3v4"/></svg>
+          <div class="side-label">Resume</div>
+        </div>
+        <div class="side-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20v-6a2 2 0 012-2h4a2 2 0 012 2v6"/><path d="M13 20V8a2 2 0 012-2h4a2 2 0 012 2v12"/></svg>
+          <div class="side-label">Creator</div>
+        </div>
+        <div class="side-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6l-11 9-5-5"/></svg>
+          <div class="side-label">Feedback</div>
+        </div>
+        <div class="side-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 012 2v4"/><path d="M14 10l6-6"/><rect x="3" y="7" width="14" height="14" rx="2"/></svg>
+          <div class="side-label">Signin</div>
+        </div>
+      </aside>
+
+      <!-- Main content -->
+      <main>
+        <div class="hero">
+          <div class="card">
+            <div class="certificate">
+              <div class="ribbon"></div>
+              <div class="frame"></div>
+              <div class="qr"></div>
+              <div class="cert-text">Certificate of Completion</div>
+            </div>
+          </div>
+          <section class="verified">
+            <div class="badge">
+              <h1 style="margin:0">Verified Learner</h1>
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.3 2.2 3.2-.2 1.1 3 2.9 1.6-1.6 2.9 1.2 3.1-3.1 1.1-.2 3.2-3 .1L12 22l-2.2-2.3-3.2.2-1.1-3-2.9-1.6 1.6-2.9-1.2-3.1 3.1-1.1.2-3.2 3-.1L12 2z" opacity=".12"/><path d="M9.5 12.5l1.8 1.8 3.7-3.8" stroke="#10b981" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <p class="muted" style="max-width:60ch">Congratulations on Completing the Entire Course! This achievement indicates that you've successfully journeyed through every aspect of the program, completing all the required hours of learning.</p>
+            <div class="btns">
+              <button class="btn primary">Share Certificate</button>
+              <button class="btn ghost">Download Certificate</button>
+            </div>
+          </section>
+        </div>
+
+        <div class="cta">
+          <div>
+            <h3 style="margin:0 0 6px">Want to get a new skill? 🚀</h3>
+            <p>Don't worry we are here to support your professional growth</p>
+          </div>
+          <button class="cta-btn">Explore free courses</button>
+        </div>
+      </main>
+    </div>
+
+    <footer>
+      <div class="foot-wrap">
+        <div class="foot-top">
+          <div class="foot-brand">
+            <span class="logo"><span class="mark"></span><span style="font-weight:800">CipherSchools</span></span>
+          </div>
+          <div class="brand-note">Cipherschools is a bootstrapped educational video streaming platform in India that is connecting passionate unskilled students to skilled Industry experts to fulfill their career dreams.</div>
+          <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap">
+            <a class="chip" href="mailto:support@cipherschools.com">✉️ support@cipherschools.com</a>
+            <span class="chip">Get the App — <strong>Google Play</strong></span>
+          </div>
+          <div class="foot-columns">
+            <div class="col">
+              <h4>Popular Instructors</h4>
+              <a href="#">Cipher Schools</a>
+              <a href="#">Harshit Vashisth</a>
+              <a href="#">Ayushi Sharma</a>
+              <a href="#">Danish Shaikh</a>
+              <a href="#">Krishna Lodha</a>
+              <a href="#">Shruti Codes</a>
+            </div>
+            <div class="col">
+              <h4>Popular Courses</h4>
+              <a href="#">Data Science</a>
+              <a href="#">Programming</a>
+              <a href="#">Data Structures</a>
+              <a href="#">Machine Learning</a>
+              <a href="#">Web Development</a>
+              <a href="#">Game Development</a>
+            </div>
+            <div class="col">
+              <h4>Company Info</h4>
+              <a href="#">Home</a>
+              <a href="#">Blog</a>
+              <a href="#">About us</a>
+              <a href="#">Alumni</a>
+              <a href="#">Privacy Policy</a>
+              <a href="#">Terms & Condition</a>
+            </div>
+            <div class="col">
+              <h4>Connect</h4>
+              <div class="social">
+                <a class="s" href="#" aria-label="YouTube">▶</a>
+                <a class="s" href="#" aria-label="Instagram">◎</a>
+                <a class="s" href="#" aria-label="LinkedIn">in</a>
+                <a class="s" href="#" aria-label="Facebook">f</a>
+                <a class="s" href="#" aria-label="Twitter">t</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="foot-bottom">
+        <span>© 2025 CipherSchools • All Rights Reserved • <a href="#">Contact Us</a></span>
+        <span>Clone UI for demo purposes</span>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    const menuBtn = document.getElementById('menuBtn');
+    const sidebar = document.getElementById('sidebar');
+    menuBtn?.addEventListener('click', ()=>{
+      sidebar.classList.toggle('open');
+    });
+
+    // Dummy actions
+    document.querySelectorAll('.btn.primary, .btn.ghost, .cta-btn').forEach(btn=>{
+      btn.addEventListener('click', ()=> alert('This is a static clone. Hook your logic here.'))
+    })
+  </script>
+</body>
+</html>
