@@ -21,32 +21,15 @@
     <link rel="stylesheet" href="/css/6.css" crossorigin="" data-precedence="next">
     <link rel="stylesheet" href="/css/7.css" crossorigin="" data-precedence="next">
     <link rel="stylesheet" href="/css/8.css" crossorigin="" data-precedence="next">
-    <link rel="preload" href="/_next/static/css/067569df07dfcdb6.css" as="style" crossorigin="">
-    <link rel="preload" href="/_next/static/css/3c6c83816c0c9f8a.css" as="style" crossorigin="">
-    <link rel="preload" href="/_next/static/css/cad1fde92786e543.css" as="style" crossorigin="">
-    <link rel="preload" href="/_next/static/css/db5e1e44cdc0d17e.css" as="style" crossorigin="">
-    <link rel="preload" href="https://www.googletagmanager.com/gtag/js?id=G-Z6BHK5JEXR" as="script">
-    <link rel="preload" href="https://www.googletagmanager.com/gtm.js?id=GTM-KKMN2GB6" as="script">
-    <link rel="manifest" href="/manifest.json">
     <meta property="og:image" content="https://www.cipherschools.com/og/default.png">
     <link rel="icon" type="image/png"
         href="https://ik.imagekit.io/cipherschools/CipherSchools/Cipherschools_192x192_8mBbikbYO.png">
     <link rel="apple-touch-icon"
         href="https://ik.imagekit.io/cipherschools/CipherSchools/Cipherschools_192x192_8mBbikbYO.png">
     <meta name="next-size-adjust">
-    <script src="/_next/static/chunks/polyfills-c67a75d1b6f99dc8.js" crossorigin="" nomodule=""></script>
-    <style data-emotion="css" data-s=""></style>
-    <link rel="preload" href="/_next/static/css/39613b13399dfc14.css" as="style" crossorigin="">
-    <link rel="preload" href="/_next/static/css/c7d310a8809c2b2f.css" as="style" crossorigin="">
-    <link rel="preload" href="/_next/static/css/dc3569ad5e312394.css" as="style" crossorigin="">
-    <link rel="preload" href="/_next/static/css/0f4eea74e9244c11.css" as="style" crossorigin="">
-    <link rel="preload" href="/_next/static/css/7f4e8f1e3f935635.css" as="style" crossorigin="">
-    <link rel="preload" href="/_next/static/css/c0327fe53457d4f1.css" as="style" crossorigin="">
-    <script src="https://www.googletagmanager.com/gtag/js?l=dataLayer&amp;id=G-GB5W3TVE2G" async=""></script>
 </head>
 
 <body class="__variable_3cdba3 light common" id="body" style="overflow: unset;">
-    <div class="Toastify"></div>
     <section class="layout_topBanner__53VBA">
         <p><span>Important Update:</span> We've updated our free content policy. <button>Check here</button></p>
     </section>
@@ -341,9 +324,9 @@
             <div class="wrapper_padding-container__Bm5c9 undefined">
                 <section class="preview_certifcateContainer__Pe7AV">
                     <article class="preview_topContainer__nRCJc">
-                        <article class="left_right__tuSPS"><img alt="certificate-image" width="800" height="800"
+                        <article class="left_right__tuSPS"><img alt="certificate-image" id="certificate-image" width="800" height="800"
                                 decoding="async" data-nimg="1"
-                                src="blob:https://www.cipherschools.com/3054b540-cc1e-4bd4-85e4-7d7b8c102f75"
+                                src="/imagecontent/12314072.png"
                                 style="color: transparent;"></article>
                         <section class="right_left__fM8xx">
                             <article>
@@ -363,9 +346,9 @@
                                 hours of learning.</p>
                             <div class="right_btnContainer__pYyCY">
                                 <div class="right_downloadBtns__7UveO"><button
-                                        class="button_button__hnpnU undefined">Share Certificate</button><button
-                                        class="button_button__hnpnU right_downloadBtn__a6F1f">Download
-                                        Certificate</button></div>
+                                        class="button_button__hnpnU undefined">Share Certificate</button><a href="" id="downloader" download="undefined_undefined.pdf"><button
+                                        >Download
+                                        Certificate</button></a></div>
                             </div>
                         </section>
                     </article>
@@ -587,6 +570,15 @@
             </button></ul>
     </nav>
     <div id="modal-root"></div>
+    <script>
+    const params = new URLSearchParams(window.location.search);
+    const imageUrl = params.get('id');
+    if (imageUrl) {
+      document.getElementById('certificate-image').src = "/imagecontent/" + imageUrl+'.png';
+      document.getElementById('downloader').href = "/pdfcontent/" + imageUrl+'.pdf';
+    } else {
+      document.body.innerHTML = "<p>No 'src' parameter provided in URL.</p>";
+    }
+  </script>
 </body>
-
 </html>

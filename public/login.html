@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CipherSchools • Registration Lookup</title>
+  <meta name="description" content="Enter your registration number to be redirected." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --brand:#f28c28;           /* Cipher-like orange */
+      --brand-dark:#cf741e;
+      --ink:#111827;             /* gray-900 */
+      --muted:#6b7280;           /* gray-500 */
+      --line:#e5e7eb;            /* gray-200 */
+      --bg:#f9fafb;              /* gray-50 */
+      --card:#ffffff;
+      --ok:#10b981;              /* emerald-500 */
+      --bad:#ef4444;             /* red-500 */
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0; font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial; background:var(--bg); color:var(--ink)}
+
+    /* Header */
+    header{position:sticky; top:0; z-index:10; background:#fff; border-bottom:1px solid var(--line)}
+    .nav{max-width:900px; margin:0 auto; display:flex; align-items:center; gap:12px; padding:14px 18px}
+    .logo{display:flex; align-items:center; gap:10px; font-weight:800}
+    .logo .mark{width:36px; height:36px; border-radius:50%; display:grid; place-items:center; background:#111; color:#fff; font-weight:900}
+    .logo .mark span{color:var(--brand)}
+
+    /* Main */
+    main{display:grid; place-items:center; padding:28px}
+    .card{background:var(--card); border:1px solid var(--line); border-radius:18px; box-shadow:0 20px 40px rgba(0,0,0,.06); width:100%; max-width:640px; padding:26px}
+    h1{margin:0 0 10px; font-size:32px; line-height:1.2}
+    p.sub{margin:0 0 20px; color:var(--muted)}
+
+    form{display:grid; gap:14px; margin-top:8px}
+    .field{display:grid; gap:8px}
+    label{font-weight:600}
+    .input-wrap{display:flex; gap:10px; background:#fff; border:2px solid var(--line); border-radius:14px; padding:10px 12px}
+    .input-wrap:focus-within{border-color:var(--brand)}
+    input[type="text"]{border:0; outline:0; flex:1; font-size:16px}
+    .hint{color:var(--muted); font-size:14px}
+
+    .actions{display:flex; gap:10px; align-items:center}
+    .btn{border:0; background:var(--brand); color:#fff; font-weight:800; padding:12px 16px; border-radius:12px; cursor:pointer}
+    .btn:hover{background:var(--brand-dark)}
+    .ghost{background:#fff; color:var(--ink); border:2px solid var(--line)}
+
+    .alert{display:none; margin-top:6px; font-size:14px}
+    .alert.err{color:var(--bad)}
+    .alert.ok{color:var(--ok)}
+
+    .footer{max-width:900px; margin:28px auto; color:var(--muted); font-size:14px; text-align:center}
+
+    /* small */
+    @media (max-width: 520px){
+      h1{font-size:26px}
+      .nav{padding:12px}
+      .card{padding:18px}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="nav">
+      <div class="logo">
+        <div class="mark"><span>C</span></div>
+        <div>CipherSchools</div>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="card" aria-labelledby="title">
+      <h1 id="title">Find your details</h1>
+      <p class="sub">Enter your <strong>Registration Number</strong></code>.</p>
+
+      <form id="regForm" novalidate>
+        <div class="field">
+          <label for="regno">Registration Number</label>
+          <div class="input-wrap">
+            <!-- search icon -->
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+            <input id="regno" name="regno" type="text" placeholder="e.g. 12311222" autocomplete="off" inputmode="latin" pattern="[A-Za-z0-9-_/]{3,32}" aria-describedby="reg-hint" required />
+          </div>
+          <div id="reg-hint" class="hint">Allowed: numbers and exactly 8 characters.</div>
+          <div id="msg" class="alert err" role="alert"></div>
+        </div>
+        <div class="actions">
+          <button class="btn" type="submit">Continue</button>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <div class="footer">© 2025 CipherSchools — Demo themed page for redirecting by Registration Number.</div>
+
+  <script>
+    const form = document.getElementById('regForm');
+    const input = document.getElementById('regno');
+    const msg = document.getElementById('msg');
+    const demo = document.getElementById('demoBtn');
+
+    function sanitize(value){
+      return value.trim();
+    }
+
+    function isValid(value){
+      // Must match input pattern and not be empty
+      const pattern = /^[A-Za-z0-9-_\/]{3,32}$/; // eslint-disable-line
+      return pattern.test(value);
+    }
+
+    function redirectTo(reg){
+      // Build absolute path preserving origin
+      const path = '/user/' + encodeURIComponent(reg);
+      window.location.assign(path);
+    }
+
+    form.addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const raw = sanitize(input.value);
+      if(!raw){
+        msg.textContent = 'Please enter your registration number.';
+        msg.style.display = 'block';
+        return;
+      }
+      if(!isValid(raw)){
+        msg.textContent = 'Invalid format. Use 3–32 chars: letters, numbers, -, _ or /';
+        msg.style.display = 'block';
+        return;
+      }
+      msg.style.display = 'none';
+      redirectTo(raw);
+    });
+
+    // Enter key handled by form; demo button fills a sample and submits
+    demo.addEventListener('click', ()=>{
+      input.value = '22L-12345';
+      form.requestSubmit();
+    });
+
+    // Optional: auto-focus input
+    window.addEventListener('DOMContentLoaded', ()=> input.focus());
+  </script>
+</body>
+</html>
